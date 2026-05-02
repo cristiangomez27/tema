@@ -1,0 +1,377 @@
+<footer class="site-footer site-footer--editable"
+  style="--footer-margin-top: {{ section.settings.margin_top }}px; --footer-padding-top: {{ section.settings.padding_top }}px; --footer-padding-bottom: {{ section.settings.padding_bottom }}px; --footer-columns: {{ section.settings.columns }}; --footer-gap: {{ section.settings.gap }}px; --footer-align: {{ section.settings.text_align }}; --footer-heading-x: {{ section.settings.heading_x }}px; --footer-heading-y: {{ section.settings.heading_y }}px;">
+  <div class="footer-grid footer-grid--editable">
+    <div class="footer-brand-block">
+      {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | default: shop.name }}</h2>{% endif %}
+      {% if section.settings.description != blank %}<p>{{ section.settings.description }}</p>{% endif %}
+      {% if settings.whatsapp_number != blank and section.settings.whatsapp_label != blank %}
+        <a class="btn btn--gold" href="https://wa.me/{{ settings.whatsapp_number | remove: ' ' | remove: '+' }}" target="_blank" rel="noopener">{{ section.settings.whatsapp_label }}</a>
+      {% endif %}
+    </div>
+
+    {% for block in section.blocks %}
+      <div class="footer-block footer-block--{{ block.type }}" style="--footer-block-x: {{ block.settings.block_x }}px; --footer-block-y: {{ block.settings.block_y }}px;" {{ block.shopify_attributes }}>
+        {% if block.settings.title != blank %}<h3>{{ block.settings.title }}</h3>{% endif %}
+        {% if block.type == 'menu' and block.settings.menu != blank %}
+          {% for link in block.settings.menu.links %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {% endfor %}
+        {% elsif block.type == 'text' %}
+          <p>{{ block.settings.text }}</p>
+        {% elsif block.type == 'social' %}
+          <div class="socials">
+            {% if block.settings.instagram != blank %}<a href="{{ block.settings.instagram }}" target="_blank" rel="noopener">{{ block.settings.instagram_label }}</a>{% endif %}
+            {% if block.settings.facebook != blank %}<a href="{{ block.settings.facebook }}" target="_blank" rel="noopener">{{ block.settings.facebook_label }}</a>{% endif %}
+            {% if block.settings.tiktok != blank %}<a href="{{ block.settings.tiktok }}" target="_blank" rel="noopener">{{ block.settings.tiktok_label }}</a>{% endif %}
+          </div>
+        {% elsif block.type == 'custom_link' %}
+          {% if block.settings.link_label != blank %}<a class="btn btn--ghost" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>{% endif %}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% if section.settings.copyright_text != blank %}
+    {% assign current_year = 'now' | date: '%Y' %}
+    {% assign copyright_line = section.settings.copyright_text | replace: '[year]', current_year | replace: '[shop]', shop.name %}
+    <div class="footer-bottom">{{ copyright_line }}</div>
+  {% else %}
+    <div class="footer-bottom">© {{ 'now' | date: '%Y' }} {{ shop.name }}. Todos los derechos reservados.</div>
+  {% endif %}
+</footer>
+
+{% schema %}
+{
+  "name": "Footer SU",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Texto principal"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Suave Urban Studio"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descripción",
+      "default": "Diseños personalizados, productos urbanos y seguimiento de pedidos desde tu tienda online."
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "Texto botón WhatsApp",
+      "default": "WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright",
+      "default": "© [year] [shop]. Todos los derechos reservados."
+    },
+    {
+      "type": "range",
+      "id": "heading_x",
+      "min": -180,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover bloque principal izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_y",
+      "min": -120,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover bloque principal arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Diseño"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columnas",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 12,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Separación",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación texto",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Separación arriba del footer",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 112
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menú",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menú"
+        },
+        {
+          "type": "range",
+          "id": "block_x",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "block_y",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque arriba/abajo",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texto",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Atención"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texto",
+          "default": "Cambia este texto desde el editor del tema."
+        },
+        {
+          "type": "range",
+          "id": "block_x",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "block_y",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque arriba/abajo",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "Redes",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Síguenos"
+        },
+        {
+          "type": "url",
+          "id": "instagram",
+          "label": "Instagram"
+        },
+        {
+          "type": "text",
+          "id": "instagram_label",
+          "label": "Texto Instagram",
+          "default": "Instagram"
+        },
+        {
+          "type": "url",
+          "id": "facebook",
+          "label": "Facebook"
+        },
+        {
+          "type": "text",
+          "id": "facebook_label",
+          "label": "Texto Facebook",
+          "default": "Facebook"
+        },
+        {
+          "type": "url",
+          "id": "tiktok",
+          "label": "TikTok"
+        },
+        {
+          "type": "text",
+          "id": "tiktok_label",
+          "label": "Texto TikTok",
+          "default": "TikTok"
+        },
+        {
+          "type": "range",
+          "id": "block_x",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "block_y",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque arriba/abajo",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "custom_link",
+      "name": "Botón/link extra",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Acceso rápido"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Texto del botón",
+          "default": "Ver más"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "range",
+          "id": "block_x",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "block_y",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque arriba/abajo",
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "menu",
+        "settings": {
+          "title": "Tienda"
+        }
+      },
+      {
+        "type": "text",
+        "settings": {
+          "title": "Horario",
+          "text": "Lunes a sábado. Edita dirección, horario y teléfono aquí."
+        }
+      },
+      {
+        "type": "social",
+        "settings": {
+          "title": "Redes"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

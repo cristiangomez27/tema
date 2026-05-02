@@ -1,0 +1,24 @@
+<article class="product-card">
+  <a class="product-card__media" href="{{ product.url }}">
+    {% if product.featured_image != blank %}
+      {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}
+    {% else %}
+      <span class="image-placeholder">SU</span>
+    {% endif %}
+    {% if product.compare_at_price > product.price %}<em>Oferta</em>{% endif %}
+  </a>
+  <div class="product-card__body">
+    {% if product.collections.first != blank %}<small>{{ product.collections.first.title }}</small>{% endif %}
+    <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <strong>{% render 'price', product: product %}</strong>
+    <div class="product-card__actions">
+      <a href="{{ product.url }}">{{ view_label | default: 'Ver modelo' }}</a>
+      {% unless show_quick_buy == false %}
+        {% form 'product', product, class: 'product-card__form' %}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <button type="submit" {% unless product.available %}disabled{% endunless %}>{% if product.available %}{{ buy_label | default: 'Comprar' }}{% else %}Agotado{% endif %}</button>
+        {% endform %}
+      {% endunless %}
+    </div>
+  </div>
+</article>

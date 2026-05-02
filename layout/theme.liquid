@@ -1,0 +1,68 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_background }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}{%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {{ content_for_header }}
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+    <style>
+      :root{
+        --su-bg: {{ settings.color_background }};
+        --su-surface: {{ settings.color_surface }};
+        --su-text: {{ settings.color_text }};
+        --su-muted: {{ settings.color_muted }};
+        --su-gold: {{ settings.color_accent }};
+        --su-gold-soft: {{ settings.color_accent_soft }};
+        --su-border: rgba(212,175,55,.16);
+        --su-radius: {{ settings.radius }}px;
+        --su-page-width: {{ settings.page_width }}px;
+        --su-page-padding-desktop: {{ settings.page_padding_desktop }}px;
+        --su-page-padding-mobile: {{ settings.page_padding_mobile }}px;
+        --su-page-top-space: {{ settings.page_top_space }}px;
+        --su-page-bottom-space: {{ settings.page_bottom_space }}px;
+        --su-glass-opacity: {{ settings.glass_opacity | divided_by: 100.0 }};
+        --su-gold-glow: {{ settings.gold_glow | divided_by: 100.0 }};
+        --su-particles-opacity: {{ settings.particles_opacity | divided_by: 100.0 }};
+        --su-bg-glow: {{ settings.background_glow | divided_by: 100.0 }};
+      }
+      .page-shell{width:min(var(--su-page-width),100%);padding-top:var(--su-page-top-space);padding-bottom:var(--su-page-bottom-space);padding-left:var(--su-page-padding-desktop);padding-right:var(--su-page-padding-desktop)}
+      .site-bg:after{opacity:{% if settings.show_particles %}var(--su-particles-opacity){% else %}0{% endif %}}
+      .site-bg{opacity:calc(.75 + var(--su-bg-glow))}
+      @media(max-width:780px){.page-shell{padding-left:var(--su-page-padding-mobile);padding-right:var(--su-page-padding-mobile)}}
+      {{ settings.custom_css }}
+    </style>
+  </head>
+
+  <body class="template-{{ template.name | handle }}">
+    <a class="skip-to-content-link" href="#MainContent">Saltar al contenido</a>
+    <div class="site-bg" aria-hidden="true"></div>
+
+    {% section 'su-header' %}
+
+    <main id="MainContent" class="page-shell" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'su-footer' %}
+  </body>
+</html>

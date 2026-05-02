@@ -1,0 +1,248 @@
+<section class="su-editable-section contact-page-section" style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --contact-head-x: {{ section.settings.heading_x }}px; --contact-head-y: {{ section.settings.heading_y }}px; --contact-align: {{ section.settings.text_align }}; --contact-gap: {{ section.settings.gap }}px; --contact-form-x: {{ section.settings.form_x }}px; --contact-form-y: {{ section.settings.form_y }}px; --contact-info-x: {{ section.settings.info_x }}px; --contact-info-y: {{ section.settings.info_y }}px;">
+  <div class="page-title page-title--editable" style="--collection-head-x: var(--contact-head-x); --collection-head-y: var(--contact-head-y); --collection-align: var(--contact-align);">
+    <p>{{ section.settings.eyebrow }}</p>
+    <h1>{{ page.title | default: section.settings.heading }}</h1>
+    <span>{{ section.settings.text }}</span>
+  </div>
+
+  <section class="contact-grid contact-grid--editable">
+    <div class="contact-card contact-form-card">
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}<p class="form-status">{{ section.settings.success_text }}</p>{% endif %}
+        {{ form.errors | default_errors }}
+        <div class="field">
+          <label for="ContactFormName">{{ section.settings.name_label }}</label>
+          <input class="field__input" id="ContactFormName" type="text" name="contact[name]" value="{{ form.name }}" required>
+        </div>
+        <div class="field">
+          <label for="ContactFormEmail">{{ section.settings.email_label }}</label>
+          <input class="field__input" id="ContactFormEmail" type="email" name="contact[email]" value="{{ form.email }}" required>
+        </div>
+        <div class="field">
+          <label for="ContactFormPhone">{{ section.settings.phone_label }}</label>
+          <input class="field__input" id="ContactFormPhone" type="tel" name="contact[phone]" value="{{ form.phone }}">
+        </div>
+        <div class="field">
+          <label for="ContactFormMessage">{{ section.settings.message_label }}</label>
+          <textarea class="field__input" id="ContactFormMessage" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
+        </div>
+        <button class="btn btn--gold" type="submit">{{ section.settings.send_label }}</button>
+      {% endform %}
+    </div>
+    <aside class="contact-card contact-info-card">
+      <h2>{{ section.settings.info_title }}</h2>
+      <p>{{ section.settings.info_text }}</p>
+      {% if settings.whatsapp_number != blank and section.settings.whatsapp_label != blank %}<a class="btn btn--gold" href="https://wa.me/{{ settings.whatsapp_number | remove: ' ' | remove: '+' }}" target="_blank" rel="noopener">{{ section.settings.whatsapp_label }}</a>{% endif %}
+    </aside>
+  </section>
+</section>
+
+{% schema %}
+{
+  "name": "Contacto",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior",
+      "default": "Contacto"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título si no hay página",
+      "default": "Personaliza tu pedido"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texto",
+      "default": "Cuéntanos qué modelo quieres y te ayudamos a cotizarlo."
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Mensaje enviado",
+      "default": "Mensaje enviado correctamente."
+    },
+    {
+      "type": "text",
+      "id": "name_label",
+      "label": "Campo nombre",
+      "default": "Nombre"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Campo correo",
+      "default": "Correo"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Campo teléfono",
+      "default": "Teléfono"
+    },
+    {
+      "type": "text",
+      "id": "message_label",
+      "label": "Campo mensaje",
+      "default": "Mensaje"
+    },
+    {
+      "type": "text",
+      "id": "send_label",
+      "label": "Botón enviar",
+      "default": "Enviar"
+    },
+    {
+      "type": "text",
+      "id": "info_title",
+      "label": "Título info",
+      "default": "Atención directa"
+    },
+    {
+      "type": "textarea",
+      "id": "info_text",
+      "label": "Texto info",
+      "default": "También puedes escribirnos por WhatsApp para una respuesta más rápida."
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "Botón WhatsApp",
+      "default": "Enviar WhatsApp"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación encabezado",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_x",
+      "min": -220,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover encabezado izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_y",
+      "min": -160,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover encabezado arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "form_x",
+      "min": -180,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover formulario izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "form_y",
+      "min": -160,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover formulario arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "info_x",
+      "min": -180,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover info izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "info_y",
+      "min": -160,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover info arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Separación formulario/info",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

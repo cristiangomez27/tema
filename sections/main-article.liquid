@@ -1,0 +1,17 @@
+<article>
+  <section class="page-title">
+    <p>{{ blog.title }}</p>
+    <h1>{{ article.title }}</h1>
+    <span>{{ article.published_at | date: '%d/%m/%Y' }}</span>
+  </section>
+  {% if article.image != blank %}
+    <div class="main-product-image" style="margin-bottom:24px">{{ article.image | image_url: width: 1600 | image_tag: loading: 'eager', alt: article.title }}</div>
+  {% endif %}
+  <div class="clean-panel rte">{{ article.content }}</div>
+</article>
+{% schema %}
+{
+  "name": "Artículo principal",
+  "settings": []
+}
+{% endschema %}

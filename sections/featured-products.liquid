@@ -1,0 +1,269 @@
+{% assign collection = section.settings.collection %}
+<section class="su-editable-section featured-products-section"
+  style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --section-align: {{ section.settings.heading_align }}; --lookbook-gap: {{ section.settings.gap }}px; --lookbook-height: {{ section.settings.card_height }}px; --lookbook-text-x: {{ section.settings.card_text_x }}px; --lookbook-text-y: {{ section.settings.card_text_y }}px; --lookbook-text-align: {{ section.settings.card_text_align }}; --lookbook-overlay: {{ section.settings.overlay_strength | divided_by: 100.0 }}; --lookbook-radius: {{ section.settings.card_radius }}px;">
+  <div class="section-head section-head--row section-head--editable">
+    <div>
+      {% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow }}</p>{% endif %}
+      {% if section.settings.heading != blank %}<h2>{{ section.settings.heading }}</h2>{% endif %}
+      {% if section.settings.text != blank %}<span>{{ section.settings.text }}</span>{% endif %}
+    </div>
+    {% if collection != blank and section.settings.link_label != blank %}<a href="{{ collection.url }}">{{ section.settings.link_label }}</a>{% endif %}
+  </div>
+
+  <div class="lookbook-grid lookbook-grid--editable lookbook-grid--{{ section.settings.grid_style }}">
+    {% if collection != blank and collection.products_count > 0 %}
+      {% for product in collection.products limit: section.settings.limit %}
+        {% render 'lookbook-card', product: product, view_label: section.settings.product_button_label, buy_label: section.settings.buy_button_label, show_quick_buy: section.settings.show_quick_buy %}
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">{{ section.settings.empty_text }}</div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Modelos destacados",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contenido"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior",
+      "default": "Destacados"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Modelos principales"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texto descriptivo",
+      "default": "Cambia título, botones, cantidad, espacios y posición de textos."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Colección"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "label": "Cantidad",
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link ver todo",
+      "default": "Ver todo"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Texto cuando no hay colección",
+      "default": "Selecciona una colección para mostrar modelos destacados."
+    },
+    {
+      "type": "header",
+      "content": "Textos de tarjetas"
+    },
+    {
+      "type": "text",
+      "id": "product_button_label",
+      "label": "Botón ver producto",
+      "default": "Ver modelo"
+    },
+    {
+      "type": "text",
+      "id": "buy_button_label",
+      "label": "Botón comprar",
+      "default": "Comprar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_buy",
+      "label": "Mostrar botón comprar directo",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_text_x",
+      "min": -140,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover texto de tarjetas izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_text_y",
+      "min": -180,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover texto de tarjetas arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "card_text_align",
+      "label": "Alineación texto de tarjetas",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Diseño"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Alineación del encabezado",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_style",
+      "label": "Estilo de acomodo",
+      "default": "masonry",
+      "options": [
+        {
+          "value": "masonry",
+          "label": "Destacado grande"
+        },
+        {
+          "value": "equal",
+          "label": "Tarjetas iguales"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "min": 300,
+      "max": 760,
+      "step": 20,
+      "unit": "px",
+      "label": "Alto de tarjetas",
+      "default": 520
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "label": "Redondeo",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 8,
+      "max": 42,
+      "step": 2,
+      "unit": "px",
+      "label": "Separación",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "overlay_strength",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Oscuridad sobre imagen",
+      "default": 90
+    },
+    {
+      "type": "header",
+      "content": "Espacios"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Modelos destacados"
+    }
+  ]
+}
+{% endschema %}

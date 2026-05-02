@@ -1,0 +1,320 @@
+<header class="site-header site-header--editable" data-section-id="{{ section.id }}"
+  style="--header-padding-top: {{ section.settings.padding_top }}px; --header-padding-bottom: {{ section.settings.padding_bottom }}px; --header-logo-size: {{ section.settings.logo_size }}px; --header-logo-radius: {{ section.settings.logo_radius }}px; --brand-x: {{ section.settings.brand_x }}px; --brand-y: {{ section.settings.brand_y }}px; --nav-x: {{ section.settings.nav_x }}px; --nav-y: {{ section.settings.nav_y }}px; --actions-x: {{ section.settings.actions_x }}px; --actions-y: {{ section.settings.actions_y }}px; --header-bg-opacity: {{ section.settings.background_opacity | divided_by: 100.0 }}; --header-blur: {{ section.settings.blur }}px;">
+  <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+    <span class="brand__logo">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 300 | image_tag: loading: 'eager', alt: shop.name }}
+      {% else %}
+        {{ section.settings.logo_text | default: 'SU' }}
+      {% endif %}
+    </span>
+    {% unless section.settings.hide_brand_text %}
+      <span class="brand__text">
+        <b>{{ section.settings.brand_name | default: shop.name }}</b>
+        <small>{{ section.settings.brand_subtitle | default: settings.brand_subtitle }}</small>
+      </span>
+    {% endunless %}
+  </a>
+
+  <nav class="main-nav main-nav--{{ section.settings.nav_align }}" aria-label="Menú principal">
+    {% if section.settings.menu != blank %}
+      {% for link in section.settings.menu.links %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {% endfor %}
+    {% else %}
+      <a href="{{ routes.root_url }}">{{ section.settings.home_label }}</a>
+      <a href="{{ routes.collections_url }}">{{ section.settings.collections_label }}</a>
+      <a href="{{ routes.all_products_collection_url }}">{{ section.settings.products_label }}</a>
+      <a href="{{ section.settings.contact_url | default: '/pages/contacto' }}">{{ section.settings.contact_label }}</a>
+    {% endif %}
+  </nav>
+
+  <div class="header-actions">
+    {% if shop.customer_accounts_enabled and section.settings.client_label != blank %}
+      <a class="header-link" href="{{ routes.account_url }}">{{ section.settings.client_label }}</a>
+    {% endif %}
+    {% if settings.worker_login_url != blank and section.settings.worker_label != blank %}
+      <a class="header-link header-link--gold" href="{{ settings.worker_login_url }}">{{ section.settings.worker_label }}</a>
+    {% endif %}
+    <a class="icon-link" href="{{ routes.cart_url }}" aria-label="{{ section.settings.cart_label }}">{{ section.settings.cart_icon }} <span data-cart-count>{{ cart.item_count }}</span></a>
+    <button class="menu-btn" type="button" data-menu-toggle aria-label="{{ section.settings.menu_button_label }}">{{ section.settings.menu_icon }}</button>
+  </div>
+</header>
+
+{% if section.settings.show_bottom_nav %}
+<nav class="bottom-nav" aria-label="Menú inferior">
+  <a href="{{ routes.root_url }}">{{ section.settings.bottom_home_icon }}<b>{{ section.settings.home_label }}</b></a>
+  <a href="{{ routes.collections_url }}">{{ section.settings.bottom_collections_icon }}<b>{{ section.settings.collections_label }}</b></a>
+  {% if shop.customer_accounts_enabled %}<a href="{{ routes.account_url }}">{{ section.settings.bottom_account_icon }}<b>{{ section.settings.bottom_account_label }}</b></a>{% endif %}
+  <a href="{{ routes.cart_url }}">{{ section.settings.cart_icon }}<b>{{ section.settings.cart_label }}</b><span data-cart-count>{{ cart.item_count }}</span></a>
+</nav>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Encabezado SU",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Marca"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Texto si no hay logo",
+      "default": "SU"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Nombre de marca",
+      "default": "Suave Urban Studio"
+    },
+    {
+      "type": "text",
+      "id": "brand_subtitle",
+      "label": "Texto pequeño",
+      "default": "Custom Studio"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_brand_text",
+      "label": "Ocultar nombre/texto pequeño",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "min": 34,
+      "max": 110,
+      "step": 2,
+      "unit": "px",
+      "label": "Tamaño logo",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "logo_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Redondeo logo",
+      "default": 18
+    },
+    {
+      "type": "number",
+      "id": "brand_x",
+      "label": "Mover marca izquierda/derecha (px, sin límite)",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "brand_y",
+      "label": "Mover marca arriba/abajo (px, sin límite)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Menú y textos"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menú principal"
+    },
+    {
+      "type": "text",
+      "id": "home_label",
+      "label": "Texto Inicio",
+      "default": "Inicio"
+    },
+    {
+      "type": "text",
+      "id": "collections_label",
+      "label": "Texto Colecciones",
+      "default": "Colecciones"
+    },
+    {
+      "type": "text",
+      "id": "products_label",
+      "label": "Texto Productos",
+      "default": "Productos"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Texto Contacto",
+      "default": "Contacto"
+    },
+    {
+      "type": "url",
+      "id": "contact_url",
+      "label": "Link de contacto (opcional)"
+    },
+    {
+      "type": "text",
+      "id": "client_label",
+      "label": "Texto Clientes",
+      "default": "Clientes"
+    },
+    {
+      "type": "text",
+      "id": "worker_label",
+      "label": "Texto Equipo",
+      "default": "Equipo"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Texto Carrito",
+      "default": "Carrito"
+    },
+    {
+      "type": "text",
+      "id": "cart_icon",
+      "label": "Icono carrito",
+      "default": "🛒"
+    },
+    {
+      "type": "text",
+      "id": "menu_icon",
+      "label": "Icono menú móvil",
+      "default": "☰"
+    },
+    {
+      "type": "text",
+      "id": "menu_button_label",
+      "label": "Accesibilidad botón menú",
+      "default": "Abrir menú"
+    },
+    {
+      "type": "select",
+      "id": "nav_align",
+      "label": "Alineación menú",
+      "default": "center",
+      "options": [
+        {
+          "value": "start",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "end",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "id": "nav_x",
+      "label": "Mover menú izquierda/derecha (px, sin límite)",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "nav_y",
+      "label": "Mover menú arriba/abajo (px, sin límite)",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "actions_x",
+      "label": "Mover botones derecha/izquierda (px, sin límite)",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "actions_y",
+      "label": "Mover botones arriba/abajo (px, sin límite)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Menú inferior móvil"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_nav",
+      "label": "Mostrar menú inferior en móvil",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "bottom_home_icon",
+      "label": "Icono Inicio",
+      "default": "⌂"
+    },
+    {
+      "type": "text",
+      "id": "bottom_collections_icon",
+      "label": "Icono Colecciones",
+      "default": "◎"
+    },
+    {
+      "type": "text",
+      "id": "bottom_account_icon",
+      "label": "Icono Cuenta",
+      "default": "♡"
+    },
+    {
+      "type": "text",
+      "id": "bottom_account_label",
+      "label": "Texto Cuenta",
+      "default": "Cuenta"
+    },
+    {
+      "type": "header",
+      "content": "Fondo y espacios"
+    },
+    {
+      "type": "range",
+      "id": "background_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacidad fondo header",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "blur",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Blur cristal",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 6,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Espacio arriba",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 6,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Espacio abajo",
+      "default": 18
+    }
+  ]
+}
+{% endschema %}
