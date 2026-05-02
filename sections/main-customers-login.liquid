@@ -1,0 +1,32 @@
+<section class="page-title">
+  <p>Clientes</p>
+  <h1>Iniciar sesión</h1>
+</section>
+
+<div class="contact-grid">
+  <div class="contact-card">
+    {% form 'customer_login' %}
+      {{ form.errors | default_errors }}
+      <div class="field">
+        <label for="CustomerEmail">Correo</label>
+        <input class="field__input" type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="CustomerPassword">Contraseña</label>
+        <input class="field__input" type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn--gold" type="submit">Entrar</button>
+      <a class="btn btn--ghost" href="{{ routes.account_register_url }}">Crear cuenta</a>
+    {% endform %}
+  </div>
+  <div class="contact-card">
+    <h2>Mi cuenta</h2>
+    <p>Desde aquí tus clientes pueden entrar a su cuenta de Shopify, revisar pedidos y continuar comprando.</p>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Login clientes",
+  "settings": []
+}
+{% endschema %}

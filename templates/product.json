@@ -1,0 +1,7 @@
+{
+  "sections": {
+    "main": { "type": "main-product" },
+    "related": { "type": "featured-products", "settings": { "heading": "También te puede gustar", "eyebrow": "Más modelos", "limit": 4 } }
+  },
+  "order": ["main", "related"]
+}

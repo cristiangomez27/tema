@@ -1,0 +1,17 @@
+{
+  "general": {
+    "cart": "Carrito",
+    "search": "Buscar"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Agregar al carrito",
+      "sold_out": "Agotado",
+      "view_product": "Ver modelo"
+    }
+  },
+  "customer": {
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta"
+  }
+}

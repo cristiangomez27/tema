@@ -1,0 +1,21 @@
+<section class="page-title">
+  <p>Pedido</p>
+  <h1>{{ order.name }}</h1>
+  <span>{{ order.created_at | date: '%d/%m/%Y' }} · {{ order.total_price | money }}</span>
+</section>
+
+<div class="clean-panel">
+  {% for line_item in order.line_items %}
+    <div class="account-row">
+      <b>{{ line_item.title }}</b>
+      <p>{{ line_item.quantity }} × {{ line_item.final_price | money }}</p>
+    </div>
+  {% endfor %}
+  <h2>Total: {{ order.total_price | money }}</h2>
+</div>
+{% schema %}
+{
+  "name": "Detalle de pedido",
+  "settings": []
+}
+{% endschema %}

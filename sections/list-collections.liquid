@@ -1,0 +1,46 @@
+<section class="page-title">
+  <p>{{ section.settings.eyebrow }}</p>
+  <h1>{{ section.settings.heading }}</h1>
+</section>
+
+<section class="category-grid">
+  {% for collection in collections %}
+    {% unless collection.handle == 'frontpage' %}
+      <a class="category-card" href="{{ collection.url }}">
+        <span class="category-card__image">
+          {% if collection.image != blank %}
+            {{ collection.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: collection.title }}
+          {% elsif collection.products.first.featured_image != blank %}
+            {{ collection.products.first.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: collection.title }}
+          {% endif %}
+        </span>
+        <span class="category-card__content">
+          <b>{{ collection.title }}</b>
+          <small>{{ collection.products_count }} productos</small>
+          <em>Ver colección</em>
+        </span>
+      </a>
+    {% endunless %}
+  {% else %}
+    <div class="empty-state">Todavía no hay colecciones creadas.</div>
+  {% endfor %}
+</section>
+{% schema %}
+{
+  "name": "Lista de colecciones",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior",
+      "default": "Categorías principales"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Todas las colecciones"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,10 @@
+<section class="page-title"><p>Clientes</p><h1>Activar cuenta</h1></section>
+<div class="contact-card">
+{% form 'activate_customer_password' %}
+  {{ form.errors | default_errors }}
+  <div class="field"><label for="CustomerPassword">Contraseña</label><input class="field__input" type="password" name="customer[password]" id="CustomerPassword" required></div>
+  <div class="field"><label for="CustomerPasswordConfirmation">Confirmar contraseña</label><input class="field__input" type="password" name="customer[password_confirmation]" id="CustomerPasswordConfirmation" required></div>
+  <button class="btn btn--gold" type="submit">Activar cuenta</button>
+  <button class="btn btn--ghost" type="submit" name="decline">Rechazar invitación</button>
+{% endform %}
+</div>
