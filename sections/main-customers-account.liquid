@@ -1,0 +1,28 @@
+<section class="page-title">
+  <p>Mi cuenta</p>
+  <h1>Hola, {{ customer.first_name | default: customer.name }}</h1>
+</section>
+
+<div class="account-grid">
+  <div class="clean-panel">
+    <h2>Pedidos</h2>
+    {% if customer.orders.size > 0 %}
+      {% for order in customer.orders %}
+        <div class="account-row">
+          <b><a href="{{ order.customer_url }}">{{ order.name }}</a></b>
+          <p>{{ order.created_at | date: '%d/%m/%Y' }} · {{ order.total_price | money }} · {{ order.financial_status_label }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>Aún no tienes pedidos.</p>
+    {% endif %}
+  </div>
+  <a class="btn btn--gold" href="{{ routes.all_products_collection_url }}">Seguir comprando</a>
+  <a class="btn btn--ghost" href="{{ routes.account_logout_url }}">Cerrar sesión</a>
+</div>
+{% schema %}
+{
+  "name": "Cuenta clientes",
+  "settings": []
+}
+{% endschema %}

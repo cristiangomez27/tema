@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "hero": { "type": "hero-suave" },
+    "categories": { "type": "category-tiles" },
+    "featured": { "type": "featured-products" },
+    "modelos": { "type": "modelos-por-categoria" },
+    "benefits": { "type": "trust-strip" }
+  },
+  "order": ["hero", "categories", "featured", "modelos", "benefits"]
+}

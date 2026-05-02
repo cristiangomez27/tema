@@ -1,0 +1,186 @@
+[
+  {
+    "name": "Marca",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      },
+      {
+        "type": "text",
+        "id": "brand_subtitle",
+        "label": "Texto pequeño de marca",
+        "default": "Custom Studio"
+      },
+      {
+        "type": "url",
+        "id": "worker_login_url",
+        "label": "Link de equipo/trabajadores"
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_number",
+        "label": "WhatsApp con lada",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "name": "Colores y estilo",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Fondo",
+        "default": "#070709"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Superficie",
+        "default": "#111014"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Texto principal",
+        "default": "#f7f0df"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Texto secundario",
+        "default": "#d8d0be"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Dorado principal",
+        "default": "#d4af37"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_soft",
+        "label": "Dorado claro",
+        "default": "#ffe08a"
+      },
+      {
+        "type": "range",
+        "id": "radius",
+        "min": 14,
+        "max": 44,
+        "step": 2,
+        "unit": "px",
+        "label": "Redondeo general",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "glass_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Opacidad cristal general",
+        "default": 5
+      },
+      {
+        "type": "range",
+        "id": "gold_glow",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Intensidad brillo dorado",
+        "default": 20
+      }
+    ]
+  },
+  {
+    "name": "Layout global",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 1000,
+        "max": 1800,
+        "step": 20,
+        "unit": "px",
+        "label": "Ancho máximo página",
+        "default": 1440
+      },
+      {
+        "type": "range",
+        "id": "page_padding_desktop",
+        "min": 12,
+        "max": 90,
+        "step": 2,
+        "unit": "px",
+        "label": "Margen lateral escritorio",
+        "default": 54
+      },
+      {
+        "type": "range",
+        "id": "page_padding_mobile",
+        "min": 10,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Margen lateral móvil",
+        "default": 14
+      },
+      {
+        "type": "range",
+        "id": "page_top_space",
+        "min": 0,
+        "max": 90,
+        "step": 2,
+        "unit": "px",
+        "label": "Espacio superior página",
+        "default": 34
+      },
+      {
+        "type": "range",
+        "id": "page_bottom_space",
+        "min": 40,
+        "max": 160,
+        "step": 4,
+        "unit": "px",
+        "label": "Espacio inferior página",
+        "default": 80
+      }
+    ]
+  },
+  {
+    "name": "Fondo y partículas",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_particles",
+        "label": "Mostrar partículas doradas",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "particles_opacity",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "%",
+        "label": "Opacidad partículas",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "background_glow",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Intensidad luces de fondo",
+        "default": 20
+      }
+    ]
+  }
+]

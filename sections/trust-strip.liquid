@@ -1,0 +1,183 @@
+<section class="su-editable-section trust-strip-section"
+  style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --trust-columns: {{ section.settings.columns }}; --trust-gap: {{ section.settings.gap }}px; --trust-align: {{ section.settings.text_align }}; --trust-radius: {{ section.settings.card_radius }}px;">
+  <div class="trust-strip trust-strip--editable">
+    {% for block in section.blocks %}
+      <article style="--trust-item-x: {{ block.settings.text_x }}px; --trust-item-y: {{ block.settings.text_y }}px;" {{ block.shopify_attributes }}>
+        {% if block.settings.icon != blank %}<span class="trust-icon">{{ block.settings.icon }}</span>{% endif %}
+        <b>{{ block.settings.title }}</b>
+        <span>{{ block.settings.text }}</span>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Beneficios",
+  "settings": [
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Columnas",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 8,
+      "max": 42,
+      "step": 2,
+      "unit": "px",
+      "label": "Separación",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 44,
+      "step": 2,
+      "unit": "px",
+      "label": "Redondeo",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación de texto",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Beneficio",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icono/emoji",
+          "default": "✦"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Diseño personalizado"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Mockups y seguimiento real."
+        },
+        {
+          "type": "range",
+          "id": "text_x",
+          "min": -100,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover texto izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "text_y",
+          "min": -80,
+          "max": 80,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover texto arriba/abajo",
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Beneficios",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "title": "Diseño personalizado",
+            "text": "Mockups y seguimiento real."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "title": "Producción conectada",
+            "text": "Flujo interno Suave Urban."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "title": "Atención por WhatsApp",
+            "text": "Compra rápida y directa."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

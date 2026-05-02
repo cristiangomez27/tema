@@ -1,0 +1,22 @@
+<section class="page-title">
+  <p>Clientes</p>
+  <h1>Crear cuenta</h1>
+</section>
+
+<div class="contact-card">
+  {% form 'create_customer' %}
+    {{ form.errors | default_errors }}
+    <div class="field"><label for="RegisterFirstName">Nombre</label><input class="field__input" type="text" name="customer[first_name]" id="RegisterFirstName"></div>
+    <div class="field"><label for="RegisterLastName">Apellido</label><input class="field__input" type="text" name="customer[last_name]" id="RegisterLastName"></div>
+    <div class="field"><label for="RegisterEmail">Correo</label><input class="field__input" type="email" name="customer[email]" id="RegisterEmail" required></div>
+    <div class="field"><label for="RegisterPassword">Contraseña</label><input class="field__input" type="password" name="customer[password]" id="RegisterPassword" required></div>
+    <button class="btn btn--gold" type="submit">Crear cuenta</button>
+    <a class="btn btn--ghost" href="{{ routes.account_login_url }}">Ya tengo cuenta</a>
+  {% endform %}
+</div>
+{% schema %}
+{
+  "name": "Registro clientes",
+  "settings": []
+}
+{% endschema %}

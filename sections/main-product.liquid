@@ -1,0 +1,337 @@
+<section class="su-editable-section product-page-section"
+  style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --product-gap: {{ section.settings.gap }}px; --product-info-x: {{ section.settings.info_x }}px; --product-info-y: {{ section.settings.info_y }}px; --product-gallery-x: {{ section.settings.gallery_x }}px; --product-gallery-y: {{ section.settings.gallery_y }}px; --product-text-align: {{ section.settings.text_align }}; --product-radius: {{ section.settings.card_radius }}px;">
+  {% if section.settings.show_breadcrumbs %}
+    <nav class="breadcrumbs">
+      <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home }}</a><span>/</span>
+      <a href="{{ routes.collections_url }}">{{ section.settings.breadcrumb_collections }}</a><span>/</span>
+      <b>{{ product.title }}</b>
+    </nav>
+  {% endif %}
+
+  <div class="product-detail product-detail--editable product-detail--{{ section.settings.layout }}">
+    <div class="product-detail__gallery">
+      <div class="main-product-image">
+        {% if product.featured_image != blank %}
+          <img src="{{ product.featured_image | image_url: width: 1400 }}" alt="{{ product.title | escape }}" loading="eager" data-main-product-image>
+        {% else %}
+          <span class="image-placeholder">SU</span>
+        {% endif %}
+      </div>
+      {% if product.media.size > 1 and section.settings.show_thumbnails %}
+        <div class="thumb-row">
+          {% for media in product.media %}
+            {% if media.preview_image != blank %}
+              <button type="button" data-thumb="{{ media.preview_image | image_url: width: 1400 }}" aria-label="Ver imagen {{ forloop.index }}">
+                {{ media.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: product.title }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <article class="product-detail__info">
+      {% if section.settings.show_collection_label and product.collections.first != blank %}<p class="eyebrow">{{ product.collections.first.title }}</p>{% endif %}
+      <h1>{{ product.title }}</h1>
+      {% if section.settings.show_price %}<strong class="detail-price" data-product-price>{% render 'price', product: product %}</strong>{% endif %}
+      {% if product.description != blank and section.settings.show_description %}<div class="rte">{{ product.description }}</div>{% endif %}
+
+      {% form 'product', product, class: 'product-form' %}
+        {% if product.has_only_default_variant %}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {% else %}
+          <div class="option-block">
+            <label for="Variant-{{ section.id }}"><b>{{ section.settings.options_label }}</b></label>
+            <select class="variant-select" id="Variant-{{ section.id }}" name="id">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                  {{ variant.title }}{% unless variant.available %} - {{ section.settings.sold_out_label }}{% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+        <div class="option-block">
+          <label for="Quantity-{{ section.id }}"><b>{{ section.settings.quantity_label }}</b></label>
+          <input class="variant-select" id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1">
+        </div>
+
+        <div class="detail-actions detail-actions--{{ section.settings.button_align }}">
+          <button class="btn btn--gold product-form__submit" type="submit" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            {% if product.selected_or_first_available_variant.available %}{{ section.settings.add_to_cart_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}
+          </button>
+          {% if section.settings.show_dynamic_checkout %}
+            {{ form | payment_button }}
+          {% endif %}
+          {% if settings.whatsapp_number != blank and section.settings.whatsapp_label != blank %}
+            <a class="btn btn--ghost" href="https://wa.me/{{ settings.whatsapp_number | remove: ' ' | remove: '+' }}?text={{ section.settings.whatsapp_message | append: product.title | url_encode }}" target="_blank" rel="noopener">{{ section.settings.whatsapp_label }}</a>
+          {% endif %}
+        </div>
+      {% endform %}
+    </article>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Producto principal",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Elementos visibles"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Mostrar ruta Inicio/Colecciones",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_label",
+      "label": "Mostrar etiqueta de colección",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Mostrar precio",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Mostrar descripción",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_thumbnails",
+      "label": "Mostrar miniaturas",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Mostrar botón de pago dinámico",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Textos"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_home",
+      "label": "Texto Inicio",
+      "default": "Inicio"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_collections",
+      "label": "Texto Colecciones",
+      "default": "Colecciones"
+    },
+    {
+      "type": "text",
+      "id": "options_label",
+      "label": "Texto opciones",
+      "default": "Opciones"
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Texto cantidad",
+      "default": "Cantidad"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Botón agregar",
+      "default": "Agregar al carrito"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Texto agotado",
+      "default": "Agotado"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "Botón WhatsApp",
+      "default": "Pedir por WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_message",
+      "label": "Mensaje WhatsApp antes del producto",
+      "default": "Hola, quiero información del modelo: "
+    },
+    {
+      "type": "header",
+      "content": "Mover y acomodar"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Acomodo",
+      "default": "gallery-left",
+      "options": [
+        {
+          "value": "gallery-left",
+          "label": "Galería izquierda"
+        },
+        {
+          "value": "gallery-right",
+          "label": "Galería derecha"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación texto",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_align",
+      "label": "Alineación botones",
+      "default": "start",
+      "options": [
+        {
+          "value": "start",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "end",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "gallery_x",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover galería izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "gallery_y",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover galería arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "info_x",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover información izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "info_y",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover información arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Espacios"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 12,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Separación galería/texto",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "label": "Redondeo",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}
