@@ -49,6 +49,7 @@
       .site-bg:after{opacity:{% if settings.show_particles %}var(--su-particles-opacity){% else %}0{% endif %}}
       .site-bg{opacity:calc(.75 + var(--su-bg-glow))}
       @media(max-width:780px){.page-shell{padding-left:var(--su-page-padding-mobile);padding-right:var(--su-page-padding-mobile)}}
+      {{ settings.custom_css }}
     </style>
   </head>
 

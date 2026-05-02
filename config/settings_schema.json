@@ -182,5 +182,16 @@
         "default": 20
       }
     ]
+  },
+  {
+    "name": "Ajustes avanzados (sin límites)",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "custom_css",
+        "label": "CSS personalizado",
+        "info": "Escribe CSS para ajustar tamaños/posiciones sin límites de sliders. Ejemplo: .hero{--hero-copy-x:420px;}"
+      }
+    ]
   }
 ]
