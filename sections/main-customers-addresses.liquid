@@ -1,0 +1,17 @@
+<section class="page-title">
+  <p>Mi cuenta</p>
+  <h1>Direcciones</h1>
+</section>
+<div class="clean-panel">
+  {% for address in customer.addresses %}
+    <div class="account-row">{{ address | format_address }}</div>
+  {% else %}
+    <p>No tienes direcciones guardadas.</p>
+  {% endfor %}
+</div>
+{% schema %}
+{
+  "name": "Direcciones clientes",
+  "settings": []
+}
+{% endschema %}

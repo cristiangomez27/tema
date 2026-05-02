@@ -1,0 +1,873 @@
+<section class="su-editable-section free-section free-section--{{ section.settings.layout }}"
+  style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --free-min-height: {{ section.settings.min_height }}px; --free-radius: {{ section.settings.radius }}px; --free-bg: {{ section.settings.background_color }}; --free-border-opacity: {{ section.settings.border_opacity | divided_by: 100.0 }}; --free-gap: {{ section.settings.gap }}px; --free-columns: {{ section.settings.columns }}; --free-align: {{ section.settings.text_align }};">
+  {% if section.settings.background_image != blank %}
+    <div class="free-section__bg" style="--free-bg-opacity: {{ section.settings.background_image_opacity | divided_by: 100.0 }}; --free-bg-x: {{ section.settings.background_x }}%; --free-bg-y: {{ section.settings.background_y }}%;">
+      {{ section.settings.background_image | image_url: width: 2200 | image_tag: loading: 'lazy', alt: section.settings.heading }}
+    </div>
+  {% endif %}
+
+  <div class="free-section__inner">
+    {% if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.text != blank %}
+      <div class="section-head section-head--editable free-section__head" style="--free-head-x: {{ section.settings.heading_x }}px; --free-head-y: {{ section.settings.heading_y }}px;">
+        {% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow }}</p>{% endif %}
+        {% if section.settings.heading != blank %}<h2>{{ section.settings.heading }}</h2>{% endif %}
+        {% if section.settings.text != blank %}<span>{{ section.settings.text }}</span>{% endif %}
+      </div>
+    {% endif %}
+
+    <div class="free-section__blocks">
+      {% for block in section.blocks %}
+        <div class="free-block free-block--{{ block.type }}" style="--free-block-x: {{ block.settings.move_x }}px; --free-block-y: {{ block.settings.move_y }}px; --free-block-width: {{ block.settings.width }}px; --free-block-align: {{ block.settings.text_align }}; --free-block-title-size: {{ block.settings.title_size }}px; --free-block-text-size: {{ block.settings.text_size }}px; --free-block-radius: {{ block.settings.radius }}px;" {{ block.shopify_attributes }}>
+          {% case block.type %}
+            {% when 'text' %}
+              {% if block.settings.eyebrow != blank %}<p class="eyebrow">{{ block.settings.eyebrow }}</p>{% endif %}
+              {% if block.settings.title != blank %}<h3>{{ block.settings.title }}</h3>{% endif %}
+              {% if block.settings.text != blank %}<div class="rte">{{ block.settings.text }}</div>{% endif %}
+            {% when 'image' %}
+              {% if block.settings.image != blank %}
+                <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %} class="free-image" style="--free-image-height: {{ block.settings.image_height }}px; --free-image-x: {{ block.settings.image_x }}%; --free-image-y: {{ block.settings.image_y }}%;">
+                  {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', alt: block.settings.title }}
+                </a>
+              {% endif %}
+              {% if block.settings.title != blank %}<h3>{{ block.settings.title }}</h3>{% endif %}
+            {% when 'button' %}
+              {% if block.settings.title != blank %}<h3>{{ block.settings.title }}</h3>{% endif %}
+              {% if block.settings.text != blank %}<p>{{ block.settings.text }}</p>{% endif %}
+              {% if block.settings.button_label != blank %}<a class="btn {% if block.settings.button_style == 'gold' %}btn--gold{% else %}btn--ghost{% endif %}" href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>{% endif %}
+            {% when 'collection' %}
+              {% assign collection = block.settings.collection %}
+              {% if collection != blank %}
+                <a class="free-collection" href="{{ collection.url }}">
+                  {% if block.settings.image != blank %}
+                    {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: collection.title }}
+                  {% elsif collection.image != blank %}
+                    {{ collection.image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: collection.title }}
+                  {% endif %}
+                  <h3>{% if block.settings.title != blank %}{{ block.settings.title }}{% else %}{{ collection.title }}{% endif %}</h3>
+                  {% if block.settings.text != blank %}<p>{{ block.settings.text }}</p>{% endif %}
+                </a>
+              {% endif %}
+            {% when 'product' %}
+              {% assign product = block.settings.product %}
+              {% if product != blank %}
+                {% render 'product-card', product: product, view_label: block.settings.view_label, buy_label: block.settings.buy_label, show_quick_buy: block.settings.show_quick_buy %}
+              {% endif %}
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Sección libre editable",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior",
+      "default": "Sección editable"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Bloque libre"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Descripción",
+      "default": "Agrega textos, imágenes, botones, productos o colecciones y muévelos con controles."
+    },
+    {
+      "type": "range",
+      "id": "heading_x",
+      "min": -240,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover encabezado izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_y",
+      "min": -160,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover encabezado arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación general",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Fondo y layout"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo"
+    },
+    {
+      "type": "range",
+      "id": "background_image_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacidad imagen fondo",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "background_x",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mover fondo izquierda/derecha",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "background_y",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mover fondo arriba/abajo",
+      "default": 50
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color de fondo",
+      "default": "#111014"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacidad borde dorado",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Acomodo de bloques",
+      "default": "grid",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "stack",
+          "label": "Uno debajo de otro"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Columnas",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 8,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Separación",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "min": 0,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "label": "Alto mínimo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Redondeo sección",
+      "default": 34
+    },
+    {
+      "type": "header",
+      "content": "Espacios"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Texto libre",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Texto superior"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Título editable"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texto",
+          "default": "<p>Escribe aquí tu contenido.</p>"
+        },
+        {
+          "type": "range",
+          "id": "move_x",
+          "min": -240,
+          "max": 240,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "move_y",
+          "min": -180,
+          "max": 180,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover arriba/abajo",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 200,
+          "max": 900,
+          "step": 20,
+          "unit": "px",
+          "label": "Ancho máximo",
+          "default": 420
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Alineación",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Izquierda"
+            },
+            {
+              "value": "center",
+              "label": "Centro"
+            },
+            {
+              "value": "right",
+              "label": "Derecha"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 18,
+          "max": 70,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño título",
+          "default": 32
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 12,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño texto",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Redondeo bloque",
+          "default": 24
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Imagen libre",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Texto debajo"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link opcional"
+        },
+        {
+          "type": "range",
+          "id": "image_height",
+          "min": 120,
+          "max": 760,
+          "step": 20,
+          "unit": "px",
+          "label": "Alto imagen",
+          "default": 320
+        },
+        {
+          "type": "range",
+          "id": "image_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Mover imagen izquierda/derecha",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "image_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Mover imagen arriba/abajo",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "move_x",
+          "min": -240,
+          "max": 240,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "move_y",
+          "min": -180,
+          "max": 180,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover bloque arriba/abajo",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 200,
+          "max": 900,
+          "step": 20,
+          "unit": "px",
+          "label": "Ancho máximo",
+          "default": 420
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Alineación",
+          "default": "center",
+          "options": [
+            {
+              "value": "left",
+              "label": "Izquierda"
+            },
+            {
+              "value": "center",
+              "label": "Centro"
+            },
+            {
+              "value": "right",
+              "label": "Derecha"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 18,
+          "max": 70,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño título",
+          "default": 28
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 12,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño texto",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Redondeo bloque",
+          "default": 24
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Texto + botón",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Llamado a la acción"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texto",
+          "default": "Cambia este texto y mueve el bloque."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Texto botón",
+          "default": "Comprar ahora"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Link botón"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Estilo botón",
+          "default": "gold",
+          "options": [
+            {
+              "value": "gold",
+              "label": "Dorado"
+            },
+            {
+              "value": "ghost",
+              "label": "Transparente"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "move_x",
+          "min": -240,
+          "max": 240,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "move_y",
+          "min": -180,
+          "max": 180,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover arriba/abajo",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 200,
+          "max": 900,
+          "step": 20,
+          "unit": "px",
+          "label": "Ancho máximo",
+          "default": 420
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Alineación",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Izquierda"
+            },
+            {
+              "value": "center",
+              "label": "Centro"
+            },
+            {
+              "value": "right",
+              "label": "Derecha"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 18,
+          "max": 70,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño título",
+          "default": 32
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 12,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño texto",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Redondeo bloque",
+          "default": 24
+        }
+      ]
+    },
+    {
+      "type": "collection",
+      "name": "Colección libre",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen manual"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título manual"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texto"
+        },
+        {
+          "type": "range",
+          "id": "move_x",
+          "min": -240,
+          "max": 240,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "move_y",
+          "min": -180,
+          "max": 180,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover arriba/abajo",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 200,
+          "max": 900,
+          "step": 20,
+          "unit": "px",
+          "label": "Ancho máximo",
+          "default": 420
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Alineación",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Izquierda"
+            },
+            {
+              "value": "center",
+              "label": "Centro"
+            },
+            {
+              "value": "right",
+              "label": "Derecha"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 18,
+          "max": 70,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño título",
+          "default": 32
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 12,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño texto",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Redondeo bloque",
+          "default": 24
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Producto libre",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Producto"
+        },
+        {
+          "type": "text",
+          "id": "view_label",
+          "label": "Texto ver producto",
+          "default": "Ver modelo"
+        },
+        {
+          "type": "text",
+          "id": "buy_label",
+          "label": "Texto comprar",
+          "default": "Comprar"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_quick_buy",
+          "label": "Mostrar comprar directo",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "move_x",
+          "min": -240,
+          "max": 240,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "move_y",
+          "min": -180,
+          "max": 180,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover arriba/abajo",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "min": 200,
+          "max": 900,
+          "step": 20,
+          "unit": "px",
+          "label": "Ancho máximo",
+          "default": 420
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Alineación",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Izquierda"
+            },
+            {
+              "value": "center",
+              "label": "Centro"
+            },
+            {
+              "value": "right",
+              "label": "Derecha"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 18,
+          "max": 70,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño título",
+          "default": 32
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 12,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Tamaño texto",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Redondeo bloque",
+          "default": 24
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sección libre editable",
+      "blocks": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

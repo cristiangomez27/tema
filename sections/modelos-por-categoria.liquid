@@ -1,0 +1,328 @@
+<section class="su-editable-section modelos-categoria-section"
+  style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --section-align: {{ section.settings.heading_align }}; --lookbook-gap: {{ section.settings.gap }}px; --lookbook-height: {{ section.settings.card_height }}px; --lookbook-text-x: {{ section.settings.card_text_x }}px; --lookbook-text-y: {{ section.settings.card_text_y }}px; --lookbook-text-align: {{ section.settings.card_text_align }}; --lookbook-overlay: {{ section.settings.overlay_strength | divided_by: 100.0 }}; --lookbook-radius: {{ section.settings.card_radius }}px;">
+  {% for block in section.blocks %}
+    {% assign collection = block.settings.collection %}
+    <div class="collection-row" style="--row-margin-top: {{ block.settings.row_margin_top }}px; --row-margin-bottom: {{ block.settings.row_margin_bottom }}px; --row-head-x: {{ block.settings.heading_x }}px; --row-head-y: {{ block.settings.heading_y }}px;" {{ block.shopify_attributes }}>
+      <div class="section-head section-head--row section-head--editable collection-row__head">
+        <div>
+          {% if block.settings.eyebrow != blank %}<p>{{ block.settings.eyebrow }}</p>{% endif %}
+          <h2>{% if block.settings.heading != blank %}{{ block.settings.heading }}{% elsif collection != blank %}{{ collection.title }}{% else %}Colección{% endif %}</h2>
+          {% if block.settings.text != blank %}<span>{{ block.settings.text }}</span>{% endif %}
+        </div>
+        {% if collection != blank and block.settings.link_label != blank %}<a href="{{ collection.url }}">{{ block.settings.link_label }}</a>{% endif %}
+      </div>
+      <div class="lookbook-grid lookbook-grid--editable lookbook-grid--{{ section.settings.grid_style }}">
+        {% if collection != blank and collection.products_count > 0 %}
+          {% for product in collection.products limit: block.settings.limit %}
+            {% render 'lookbook-card', product: product, view_label: block.settings.product_button_label, buy_label: block.settings.buy_button_label, show_quick_buy: section.settings.show_quick_buy %}
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">{{ block.settings.empty_text }}</div>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</section>
+
+{% schema %}
+{
+  "name": "Modelos por categoría",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Diseño general"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Alineación de encabezados",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_style",
+      "label": "Estilo de tarjetas",
+      "default": "equal",
+      "options": [
+        {
+          "value": "masonry",
+          "label": "Destacado grande"
+        },
+        {
+          "value": "equal",
+          "label": "Tarjetas iguales"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "min": 300,
+      "max": 760,
+      "step": 20,
+      "unit": "px",
+      "label": "Alto de tarjetas",
+      "default": 460
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "label": "Redondeo",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 8,
+      "max": 42,
+      "step": 2,
+      "unit": "px",
+      "label": "Separación",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "overlay_strength",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Oscuridad sobre imagen",
+      "default": 90
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_buy",
+      "label": "Mostrar botón comprar directo",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_text_x",
+      "min": -140,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover texto tarjetas izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_text_y",
+      "min": -180,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover texto tarjetas arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "card_text_align",
+      "label": "Alineación texto tarjetas",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Espacios"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_row",
+      "name": "Fila de categoría",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Texto superior",
+          "default": "5 modelos por categoría"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título manual"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texto descriptivo"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "min": 3,
+          "max": 12,
+          "step": 1,
+          "label": "Modelos a mostrar",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Texto link",
+          "default": "Ver categoría"
+        },
+        {
+          "type": "text",
+          "id": "product_button_label",
+          "label": "Botón ver producto",
+          "default": "Ver modelo"
+        },
+        {
+          "type": "text",
+          "id": "buy_button_label",
+          "label": "Botón comprar",
+          "default": "Comprar"
+        },
+        {
+          "type": "text",
+          "id": "empty_text",
+          "label": "Texto si no hay productos",
+          "default": "Conecta una colección para mostrar sus modelos."
+        },
+        {
+          "type": "header",
+          "content": "Mover encabezado de esta fila"
+        },
+        {
+          "type": "range",
+          "id": "heading_x",
+          "min": -200,
+          "max": 200,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover encabezado izquierda/derecha",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "heading_y",
+          "min": -120,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Mover encabezado arriba/abajo",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "row_margin_top",
+          "min": 0,
+          "max": 140,
+          "step": 4,
+          "unit": "px",
+          "label": "Espacio arriba de esta fila",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "row_margin_bottom",
+          "min": 0,
+          "max": 140,
+          "step": 4,
+          "unit": "px",
+          "label": "Espacio abajo de esta fila",
+          "default": 32
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Modelos por categoría",
+      "blocks": [
+        {
+          "type": "collection_row",
+          "settings": {
+            "heading": "Hombre"
+          }
+        },
+        {
+          "type": "collection_row",
+          "settings": {
+            "heading": "Mujer"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

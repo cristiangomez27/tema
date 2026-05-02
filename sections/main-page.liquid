@@ -1,0 +1,127 @@
+<section class="su-editable-section normal-page-section" style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --normal-head-x: {{ section.settings.heading_x }}px; --normal-head-y: {{ section.settings.heading_y }}px; --normal-align: {{ section.settings.text_align }}; --normal-panel-x: {{ section.settings.panel_x }}px; --normal-panel-y: {{ section.settings.panel_y }}px;">
+  <div class="page-title page-title--editable" style="--collection-head-x: var(--normal-head-x); --collection-head-y: var(--normal-head-y); --collection-align: var(--normal-align);">
+    <p>{{ section.settings.eyebrow }}</p>
+    <h1>{% if section.settings.title_override != blank %}{{ section.settings.title_override }}{% else %}{{ page.title }}{% endif %}</h1>
+  </div>
+  <div class="clean-panel rte normal-page-panel">
+    {{ page.content }}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Página principal",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior",
+      "default": "Suave Urban Studio"
+    },
+    {
+      "type": "text",
+      "id": "title_override",
+      "label": "Título manual opcional"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación encabezado",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_x",
+      "min": -220,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover encabezado izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_y",
+      "min": -160,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover encabezado arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "panel_x",
+      "min": -220,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover contenido izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "panel_y",
+      "min": -160,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover contenido arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

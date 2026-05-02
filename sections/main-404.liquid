@@ -1,0 +1,141 @@
+<section class="su-editable-section error-page-section" style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --error-head-x: {{ section.settings.heading_x }}px; --error-head-y: {{ section.settings.heading_y }}px; --error-align: {{ section.settings.text_align }};">
+  <div class="page-title page-title--editable" style="--collection-head-x: var(--error-head-x); --collection-head-y: var(--error-head-y); --collection-align: var(--error-align);">
+    <p>{{ section.settings.eyebrow }}</p>
+    <h1>{{ section.settings.heading }}</h1>
+    <span>{{ section.settings.text }}</span>
+  </div>
+  <div class="detail-actions detail-actions--{{ section.settings.button_align }}">
+    <a class="btn btn--gold" href="{{ routes.root_url }}">{{ section.settings.button_label }}</a>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "404",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior",
+      "default": "404"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Página no encontrada"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texto",
+      "default": "La página que buscas no existe o fue movida."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Botón",
+      "default": "Volver al inicio"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación texto",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_align",
+      "label": "Alineación botón",
+      "default": "start",
+      "options": [
+        {
+          "value": "start",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "end",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_x",
+      "min": -220,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover texto izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_y",
+      "min": -160,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover texto arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

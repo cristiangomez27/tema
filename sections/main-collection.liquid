@@ -1,0 +1,234 @@
+<section class="su-editable-section collection-page-section"
+  style="--section-margin-top: {{ section.settings.margin_top }}px; --section-margin-bottom: {{ section.settings.margin_bottom }}px; --section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --collection-head-x: {{ section.settings.heading_x }}px; --collection-head-y: {{ section.settings.heading_y }}px; --collection-align: {{ section.settings.text_align }}; --product-grid-columns: {{ section.settings.columns }}; --product-grid-gap: {{ section.settings.gap }}px;">
+  <div class="page-title page-title--editable">
+    {% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow }}</p>{% endif %}
+    <h1>{% if section.settings.title_override != blank %}{{ section.settings.title_override }}{% else %}{{ collection.title }}{% endif %}</h1>
+    {% if section.settings.description_override != blank %}
+      <span>{{ section.settings.description_override }}</span>
+    {% elsif collection.description != blank and section.settings.show_description %}
+      <span>{{ collection.description }}</span>
+    {% endif %}
+  </div>
+
+  {% paginate collection.products by section.settings.products_per_page %}
+    {% if section.settings.show_toolbar %}
+      <div class="collection-toolbar">
+        <span>{{ collection.products_count }} {{ section.settings.products_count_label }}</span>
+        <form method="get">
+          <select class="variant-select" name="sort_by" onchange="this.form.submit()" aria-label="{{ section.settings.sort_label }}">
+            {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+            {% for option in collection.sort_options %}
+              <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
+            {% endfor %}
+          </select>
+        </form>
+      </div>
+    {% endif %}
+
+    <section class="product-grid product-grid--editable">
+      {% for product in collection.products %}
+        {% render 'product-card', product: product, view_label: section.settings.view_product_label, buy_label: section.settings.buy_label, show_quick_buy: section.settings.show_quick_buy %}
+      {% else %}
+        <div class="empty-state">{{ section.settings.empty_text }}</div>
+      {% endfor %}
+    </section>
+
+    {% if paginate.pages > 1 %}
+      <nav class="pagination" role="navigation">
+        {{ paginate | default_pagination }}
+      </nav>
+    {% endif %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "Colección principal",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto superior",
+      "default": "Suave Urban Studio"
+    },
+    {
+      "type": "text",
+      "id": "title_override",
+      "label": "Título manual opcional"
+    },
+    {
+      "type": "textarea",
+      "id": "description_override",
+      "label": "Descripción manual opcional"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Mostrar descripción de colección",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alineación texto",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_x",
+      "min": -220,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover encabezado izquierda/derecha",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_y",
+      "min": -160,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Mover encabezado arriba/abajo",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Productos"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Productos por página",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Columnas escritorio",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 8,
+      "max": 42,
+      "step": 2,
+      "unit": "px",
+      "label": "Separación entre productos",
+      "default": 18
+    },
+    {
+      "type": "checkbox",
+      "id": "show_toolbar",
+      "label": "Mostrar barra de ordenar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "products_count_label",
+      "label": "Texto después del número de productos",
+      "default": "productos"
+    },
+    {
+      "type": "text",
+      "id": "sort_label",
+      "label": "Etiqueta ordenar",
+      "default": "Ordenar productos"
+    },
+    {
+      "type": "text",
+      "id": "view_product_label",
+      "label": "Botón ver producto",
+      "default": "Ver modelo"
+    },
+    {
+      "type": "text",
+      "id": "buy_label",
+      "label": "Botón comprar",
+      "default": "Comprar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_buy",
+      "label": "Mostrar comprar directo",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Texto si no hay productos",
+      "default": "Todavía no hay modelos publicados en esta categoría."
+    },
+    {
+      "type": "header",
+      "content": "Espacios"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio interno abajo",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo arriba",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio externo abajo",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}
